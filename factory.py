@@ -47,7 +47,7 @@ def client(file, format):  # client
         result = formats[format](file)
         return result.call_edit()
     else:
-        return "This format is not supported bt factory"
+        return "This format is not supported by factory"
 
 
 print(client('harchi', 'Json'))
