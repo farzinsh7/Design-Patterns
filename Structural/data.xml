@@ -1,0 +1,7 @@
+<employees>
+    <employee>
+        <name>John</name>
+        <role>Manager</role>
+        <age>38</age>
+    </employee>
+</employees>
