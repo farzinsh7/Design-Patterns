@@ -69,13 +69,88 @@ class User(Observer):
         print(f"{self.name} received update: The new stock price is ${price}")
         
 
-stock = Stock()
 
-user1 = User("Alice")
-user2 = User("Bob")
+# ---------  Challenge: Weather Station System ---------
+"""
+You need to create a weather station that broadcasts temperature updates to multiple devices. 
+Devices like a Phone, Laptop, and Tablet should get updates when the weather changes.
 
-stock.register_observer(user1)
-stock.register_observer(user2)
+✅ Your task:
 
-stock.set_price(100)
+    1- Implement the Observer Pattern:
+        - Subject: WeatherStation – Keeps track of the temperature.
+        - Observers: PhoneDisplay, LaptopDisplay, TabletDisplay – Receive and display temperature updates.
+        
+    2- Ensure that when the temperature changes, all devices receive the update.
+    3- Add methods to register, remove, and notify devices.
+"""
 
+
+# Answer
+
+class Observer(ABC):
+    @abstractmethod
+    def update(self, temperature):
+        pass
+    
+
+class Subject(ABC):
+    @abstractmethod
+    def register_observer(self, observer:Observer):
+        pass
+    
+    @abstractmethod
+    def remove_observer(self, observer:Observer):
+        pass
+    
+    @abstractmethod
+    def notify_observers(self):
+        pass
+    
+class WeatherStation(Subject):
+    
+    def __init__(self):
+        self._observers = []
+        self._temperature = 0
+        
+        
+    def register_observer(self, observer:Observer):
+        self._observers.append(observer)
+    
+    
+    def remove_observer(self, observer:Observer):
+        self._observers.remove(observer)
+    
+    
+    def notify_observers(self):
+        for observer in self._observers:
+            observer.update(self._temperature)
+            
+    def set_temperature(self, temperature):
+        self._temperature = temperature
+        print(f"\nWeatherStation: Temperature updated to {temperature}°C")
+        self.notify_observers()
+
+class Device(Observer):
+    def __init__(self, device):
+        self.device = device
+        
+    def update(self, temperature):
+        print(f"{self.device} received update: The new temperature is {temperature}°C")
+            
+        
+station = WeatherStation()
+
+device1 = Device("PhoneDisplay")
+device2 = Device("LaptopDisplay")
+device3 = Device("TabletDisplay")
+
+station.register_observer(device1)
+station.register_observer(device2)
+station.register_observer(device3)
+
+
+station.remove_observer(device2)
+
+station.set_temperature(120)
+station.set_temperature(-250)
