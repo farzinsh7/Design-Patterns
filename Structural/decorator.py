@@ -95,13 +95,73 @@ class PepperoniTopping(PizzaDeccorator):
         return self._pizza.get_description() + " add Pepperoni Topping"
         
         
+# --------- Challenge: Notification System ---------
+"""
+You're building a Notification System for an application. 
+The system sends notifications to users, but it needs to support multiple communication channels, such as:
 
-base_pizza = BasePizza()
-print(base_pizza.cost())
-print(base_pizza.get_description())
-add_pepperoni = PepperoniTopping(base_pizza)
-print(add_pepperoni.cost())
-print(add_pepperoni.get_description())
-add_olives = OlivesTopping(add_pepperoni)
-print(add_olives.cost())
-print(add_olives.get_description())
+    - Email
+    - SMS
+    - Push Notifications
+    
+Each notification can be sent through multiple channels. 
+For example, you might send a Push Notification and Email to the same user.
+
+    1- Create a base Notification class.
+    2- Create decorators for the following notification types:
+        - EmailNotification
+        - SMSNotification
+        - PushNotification
+        
+    3- The decorators should add the respective functionality to the base notification.
+    4- Add a send() method that will send the notification and print the method of sending.
+    5- Finally, create a NotificationSystem that sends notifications via different combinations of these channels.
+    
+Instructions:
+    1- Define a Notification base class.
+    2- Create decorators for each notification channel (Email, SMS, Push).
+    3- Combine the decorators to send a notification through multiple channels.
+    4- Print which channels the notification was sent through.
+"""
+
+# Answer
+class Notification(ABC):
+    @abstractmethod
+    def send(self):
+        pass
+    
+class BaseNotification(Notification):
+    def send(self):
+        return "This is Notification"
+
+
+class NotificationDecorator(Notification):
+    def __init__(self, notification: Notification):
+        self._notification = notification
+       
+    @abstractmethod    
+    def send(self):
+        pass
+    
+class EmailNotification(NotificationDecorator):
+    def send(self):
+        return self._notification.send() + " by Email" 
+
+class SMSNotification(NotificationDecorator):
+    def send(self):
+        return self._notification.send() + " by SMS" 
+
+
+class PushNotification(NotificationDecorator):
+    def send(self):
+        return self._notification.send() + " by PUSH" 
+
+
+base_notif = BaseNotification()
+
+email_notif = EmailNotification(base_notif)
+print(email_notif.send())
+sms_notif = SMSNotification(email_notif)
+print(sms_notif.send())
+push_notif = PushNotification(sms_notif)
+print(push_notif.send())
